@@ -1,50 +1,37 @@
-with Ada.Containers.Vectors,
-     Ada.Integer_Text_IO,
+with Ada.Integer_Text_IO,
      Ada.Text_IO;
 
 procedure Primes is
-   package Integer_Sets is
-     new Ada.Containers.Vectors (Element_Type => Positive,
-                                 Index_Type   => Positive);
-   use Integer_Sets;
-   use type Ada.Containers.Count_Type;
-
-   Result : Vector;
+   Result : array (1 .. 1_000_000) of Positive;
+   Count  : Positive;
    Last   : Positive;
    Prime  : Boolean;
 begin
-   Last := 3;
-   Result.Append (Last);
+   Result (1) := 2;
+   Result (2) := 3;
+   Count      := 2;
+   Last       := 3;
 
    Find_Primes :
    loop
       Last := Last + 2;
       Prime := True;
 
-      declare
-         Cursor : Integer_Sets.Cursor := Result.First;
-      begin
-         Check_Divisible :
-         while Has_Element (Cursor) loop
-            declare
-               Divisor : Positive renames Element (Cursor);
-            begin
-               exit Check_Divisible when Divisor * Divisor > Last;
+      Check_Divisible :
+      for Divisor of Result (2 .. Count) loop
+         exit Check_Divisible when Divisor * Divisor > Last;
 
-               if Last mod Divisor = 0 then
-                  Prime := False;
-                  exit Check_Divisible;
-               end if;
-            end;
-
-            Next (Cursor);
-         end loop Check_Divisible;
-      end;
+         if Last mod Divisor = 0 then
+            Prime := False;
+            exit Check_Divisible;
+         end if;
+      end loop Check_Divisible;
 
       if Prime then
-         Result.Append (Last);
+         Count := Count + 1;
+         Result (Count) := Last;
 
-         if Result.Length mod 100_000 = 0 then
+         if (Count - 1) mod 100_000 = 0 then
             Ada.Integer_Text_IO.Put (Last);
             Ada.Text_IO.New_Line;
          end if;
@@ -54,6 +41,6 @@ begin
    end loop Find_Primes;
 
    Ada.Text_IO.Put ("Total: ");
-   Ada.Integer_Text_IO.Put (Natural (Result.Length) + 1); --  2 is a prime
+   Ada.Integer_Text_IO.Put (Count);
    Ada.Text_IO.Put_Line (" primes");
 end Primes;
