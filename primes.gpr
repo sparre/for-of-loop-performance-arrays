@@ -1,0 +1,12 @@
+--  O mighty Emacs, please use -*- Ada -*- mode in this lowly file.
+
+with "ada_2012";
+
+project Ada_2012_Examples is
+   for Source_Dirs use (".");
+
+   for Main use ("primes");
+
+   package Builder  renames Ada_2012.Builder;
+   package Compiler renames Ada_2012.Compiler;
+end Ada_2012_Examples;

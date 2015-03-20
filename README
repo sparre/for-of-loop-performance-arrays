@@ -1,0 +1,10 @@
+Manually iterating over a container
+===================================
+
+This construct is about 10 times faster than the "for ... of" construct, when
+using GNAT GPL 2014.
+
+When comparing the -gnatD output of the two versions, the inner loop of the
+"for ... of" version contains 98 lines instead of 28 lines.  But why?  Is this
+version less safe?
+
